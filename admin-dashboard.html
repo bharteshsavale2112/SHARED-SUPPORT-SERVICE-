@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Bajaj Auto - Admin Dashboard</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f1f5f9;
+}
+
+.sidebar{
+    width:270px;
+    background:#0f172a;
+}
+
+.card{
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<body class="bg-slate-100">
+
+<div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-slate-900 text-white">
+
+        <div class="p-6 border-b border-slate-700">
+            <h1 class="text-2xl font-bold">BAJAJ AUTO</h1>
+            <p class="text-sm text-slate-400">Transport System</p>
+        </div>
+
+        <nav class="p-4 space-y-2">
+
+            <a href="admin-dashboard.html"
+               class="block bg-blue-600 px-4 py-3 rounded-xl">
+                🏠 Dashboard
+            </a>
+
+            <a href="employee-list.html"
+               class="block hover:bg-slate-700 px-4 py-3 rounded-xl">
+                👨 Employee List
+            </a>
+
+            <a href="buspass.html"
+               class="block hover:bg-slate-700 px-4 py-3 rounded-xl">
+                🎫 Bus Pass Requests
+            </a>
+
+            <a href="driverpanel.html"
+               class="block hover:bg-slate-700 px-4 py-3 rounded-xl">
+                🚌 Drivers
+            </a>
+
+            <a href="viewroots.html"
+               class="block hover:bg-slate-700 px-4 py-3 rounded-xl">
+                📍 Live Tracking
+            </a>
+
+            <a href="adminlogin.html"
+               class="block hover:bg-red-700 px-4 py-3 rounded-xl text-red-300">
+                🚪 Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1">
+
+        <!-- Top Bar -->
+        <div class="bg-white shadow px-8 py-5 flex justify-between items-center">
+
+            <div>
+                <h2 class="text-3xl font-bold">
+                    Bajaj Transport Dashboard
+                </h2>
+
+                <p class="text-slate-500">
+                    Welcome, Administrator
+                </p>
+            </div>
+
+            <div class="text-right">
+                <p class="font-semibold">
+                    Admin Panel
+                </p>
+                <p class="text-sm text-slate-500">
+                    Live Monitoring
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 p-6">
+
+            <div class="bg-white rounded-3xl shadow p-6">
+                <p class="text-slate-500">Total Requests</p>
+                <h2 id="totalCount"
+                    class="text-5xl font-bold text-blue-600 mt-3">
+                    0
+                </h2>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow p-6">
+                <p class="text-slate-500">Approved</p>
+                <h2 id="approvedCount"
+                    class="text-5xl font-bold text-green-600 mt-3">
+                    0
+                </h2>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow p-6">
+                <p class="text-slate-500">Pending</p>
+                <h2 id="pendingCount"
+                    class="text-5xl font-bold text-orange-500 mt-3">
+                    0
+                </h2>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow p-6">
+                <p class="text-slate-500">Active Buses</p>
+                <h2 class="text-5xl font-bold text-purple-600 mt-3">
+                    18
+                </h2>
+            </div>
+
+        </div>
+
+<!-- ===========================
+     STEP 2 : ANALYTICS SECTION
+=========================== -->
+
+<div class="px-6 pb-6">
+
+    <!-- Analytics Card -->
+
+    <div class="bg-white rounded-3xl shadow p-6 mb-6">
+
+        <div class="flex justify-between items-center mb-6">
+
+            <div>
+
+                <h2 class="text-2xl font-bold">
+                    📊 Transport Analytics
+                </h2>
+
+                <p class="text-slate-500">
+                    Live Bus Pass Statistics
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+
+            <!-- Doughnut Chart -->
+
+            <div>
+
+                <h3 class="font-semibold mb-4">
+                    Approved vs Pending
+                </h3>
+
+                <canvas id="analyticsChart"></canvas>
+
+            </div>
+
+            <!-- Quick Summary -->
+
+            <div class="grid gap-4">
+
+                <div class="bg-blue-50 rounded-2xl p-5">
+
+                    <p class="text-slate-500">
+                        Total Bus Pass Requests
+                    </p>
+
+                    <h2 id="summaryTotal"
+                        class="text-4xl font-bold text-blue-700 mt-2">
+
+                        0
+
+                    </h2>
+
+                </div>
+
+                <div class="bg-green-50 rounded-2xl p-5">
+
+                    <p class="text-slate-500">
+                        Approved Requests
+                    </p>
+
+                    <h2 id="summaryApproved"
+                        class="text-4xl font-bold text-green-600 mt-2">
+
+                        0
+
+                    </h2>
+
+                </div>
+
+                <div class="bg-orange-50 rounded-2xl p-5">
+
+                    <p class="text-slate-500">
+                        Pending Requests
+                    </p>
+
+                    <h2 id="summaryPending"
+                        class="text-4xl font-bold text-orange-500 mt-2">
+
+                        0
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Recent Requests -->
+
+    <div class="bg-white rounded-3xl shadow p-6">
+
+        <div class="flex justify-between items-center mb-6">
+
+            <h2 class="text-2xl font-bold">
+
+                🎫 Recent Bus Pass Requests
+
+            </h2>
+
+            <span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-xl">
+
+                Total :
+                <span id="requestCounter">0</span>
+
+            </span>
+
+        </div>
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full">
+
+                <thead class="bg-slate-100">
+
+                    <tr>
+
+                        <th class="p-3 text-left">
+                            Employee Code
+                        </th>
+
+                        <th class="p-3 text-left">
+                            Employee Name
+                        </th>
+
+                        <th class="p-3 text-left">
+                            Department
+                        </th>
+
+                        <th class="p-3 text-left">
+                            Route
+                        </th>
+
+                        <th class="p-3 text-left">
+                            Status
+                        </th>
+
+                        <th class="p-3 text-left">
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="requestTable">
+
+                    <!-- Dynamic rows from backend -->
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+// ===============================
+// 1. Dashboard Statistics
+// ===============================
+
+fetch("http://127.0.0.1:5000/dashboard-stats")
+.then(res => res.json())
+.then(data => {
+
+    document.getElementById("totalCount").innerText =
+        data.total_requests;
+
+    document.getElementById("approvedCount").innerText =
+        data.approved;
+
+    document.getElementById("pendingCount").innerText =
+        data.pending;
+
+    document.getElementById("summaryTotal").innerText =
+        data.total_requests;
+
+    document.getElementById("summaryApproved").innerText =
+        data.approved;
+
+    document.getElementById("summaryPending").innerText =
+        data.pending;
+
+    document.getElementById("requestCounter").innerText =
+        data.total_requests;
+
+    // Update Doughnut Chart
+    analyticsChart.data.datasets[0].data = [
+        data.approved,
+        data.pending
+    ];
+
+    analyticsChart.update();
+
+});
+
+// ===============================
+// 2. Doughnut Chart
+// ===============================
+
+const analyticsChart = new Chart(
+    document.getElementById("analyticsChart"),
+    {
+        type: "doughnut",
+
+        data: {
+            labels: [
+                "Approved",
+                "Pending"
+            ],
+
+            datasets: [
+                {
+                    data: [0, 0],
+                    backgroundColor: [
+                        "#16a34a",
+                        "#f59e0b"
+                    ]
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: "bottom"
+                }
+            }
+        }
+    }
+);
+
+// ===============================
+// 3. Load Bus Pass Requests
+// ===============================
+
+fetch("http://127.0.0.1:5000/view-requests")
+.then(res => res.json())
+.then(data => {
+
+    const table = document.getElementById("requestTable");
+
+    for (let i = 1; i < data.length; i++) {
+
+        const row = data[i];
+
+        const status = row[10] || "Pending";
+
+        table.innerHTML += `
+
+        <tr class="border-b hover:bg-slate-50">
+
+            <td class="p-3">${row[0]}</td>
+
+            <td class="p-3 font-semibold">
+                ${row[1]}
+            </td>
+
+            <td class="p-3">
+                ${row[2]}
+            </td>
+
+            <td class="p-3">
+                ${row[6]}
+            </td>
+
+            <td class="p-3">
+
+                ${
+                    status === "Approved"
+
+                    ?
+
+                    `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full">
+                        Approved
+                    </span>`
+
+                    :
+
+                    `<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">
+                        Pending
+                    </span>`
+                }
+
+            </td>
+
+            <td class="p-3">
+
+                ${
+                    status === "Approved"
+
+                    ?
+
+                    `<button
+                        disabled
+                        class="bg-gray-300 px-4 py-2 rounded-xl">
+                        Approved
+                    </button>`
+
+                    :
+
+                    `<form action="http://127.0.0.1:5000/approve-request/${row[0]}"
+                           method="POST">
+
+                        <button
+                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl">
+
+                            Approve
+
+                        </button>
+
+                    </form>`
+                }
+
+            </td>
+
+        </tr>
+
+        `;
+    }
+
+});
+</script>
+
+
+<!-- =========================
+     STEP 4 : SEARCH & FILTERS
+========================= -->
+
+<div class="bg-white rounded-3xl shadow p-6 mb-6">
+
+    <div class="grid md:grid-cols-3 gap-4">
+
+        <!-- Search -->
+
+        <input
+            type="text"
+            id="searchEmployee"
+            placeholder="🔍 Search by Employee Name or Code"
+            class="border p-3 rounded-xl w-full">
+
+        <!-- Department -->
+
+        <select
+            id="departmentFilter"
+            class="border p-3 rounded-xl">
+
+            <option value="">All Departments</option>
+
+            <option>Production</option>
+
+            <option>Quality</option>
+
+            <option>Maintenance</option>
+
+            <option>HR</option>
+
+            <option>IT</option>
+
+        </select>
+
+        <!-- Status -->
+
+        <select
+            id="statusFilter"
+            class="border p-3 rounded-xl">
+
+            <option value="">All Status</option>
+
+            <option>Approved</option>
+
+            <option>Pending</option>
+
+        </select>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const searchInput =
+document.getElementById("searchEmployee");
+
+const departmentFilter =
+document.getElementById("departmentFilter");
+
+const statusFilter =
+document.getElementById("statusFilter");
+
+function applyFilters(){
+
+    const search =
+    searchInput.value.toLowerCase();
+
+    const dept =
+    departmentFilter.value.toLowerCase();
+
+    const status =
+    statusFilter.value.toLowerCase();
+
+    const rows =
+    document.querySelectorAll("#employeeTable tr");
+
+    rows.forEach(row=>{
+
+        const text =
+        row.innerText.toLowerCase();
+
+        const matchSearch =
+        text.includes(search);
+
+        const matchDept =
+        dept === "" || text.includes(dept);
+
+        const matchStatus =
+        status === "" || text.includes(status);
+
+        if(matchSearch && matchDept && matchStatus){
+
+            row.style.display = "";
+
+        }else{
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+}
+
+searchInput.addEventListener(
+    "keyup",
+    applyFilters
+);
+
+departmentFilter.addEventListener(
+    "change",
+    applyFilters
+);
+
+statusFilter.addEventListener(
+    "change",
+    applyFilters
+);
+
+</script>
+
+
+</body>
+</html>
+

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Live Bus Tracking</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family:'Inter',sans-serif;
+background:#f1f5f9;
+}
+
+#map{
+height:400px;
+width:100%;
+border-radius:20px;
+}
+
+.route-card{
+transition:.3s;
+}
+
+.route-card:hover{
+transform:translateY(-5px);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header class="bg-white shadow-md sticky top-0 z-50">
+
+<div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+
+<div class="flex items-center gap-3">
+
+<div class="h-12 w-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white text-2xl">
+🚌
+</div>
+
+<div>
+
+<h1 class="font-extrabold text-blue-900 text-xl">
+BAJAJ AUTO
+</h1>
+
+<p class="text-xs text-gray-500">
+LIVE BUS TRACKING
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- PAGE -->
+
+<section class="max-w-7xl mx-auto px-4 py-10">
+
+<h2 class="text-4xl font-extrabold text-slate-800 mb-8">
+Employee Transport Routes
+</h2>
+
+<div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+<!-- ROUTE 1 -->
+
+<div class="route-card bg-white rounded-3xl p-6 shadow-sm border">
+
+<div class="flex justify-between items-center mb-5">
+
+<div>
+
+<p class="text-xs text-gray-500">
+ROUTE NO
+</p>
+
+<h3 class="text-2xl font-extrabold text-blue-700">
+01
+</h3>
+
+</div>
+
+<div class="bg-green-100 text-green-700 px-4 py-2 rounded-xl text-sm font-bold">
+LIVE
+</div>
+
+</div>
+
+<h4 class="text-xl font-bold text-slate-800 mb-4">
+Chakan To Pune Station
+</h4>
+
+<div class="space-y-3">
+
+<div class="flex justify-between">
+<p class="text-gray-500 text-sm">Driver</p>
+<p class="font-semibold">Santosh Patil</p>
+</div>
+
+<div class="flex justify-between">
+<p class="text-gray-500 text-sm">Contact</p>
+
+<a href="tel:9876543210"
+class="font-semibold text-blue-600">
+9876543210
+</a>
+
+</div>
+
+</div>
+
+<button
+onclick="openTracking('route1','Route 01')"
+class="w-full bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-2xl font-bold mt-6">
+
+TRACK LIVE
+
+</button>
+
+</div>
+
+<!-- ROUTE 2 -->
+
+<div class="route-card bg-white rounded-3xl p-6 shadow-sm border">
+
+<div class="flex justify-between items-center mb-5">
+
+<div>
+
+<p class="text-xs text-gray-500">
+ROUTE NO
+</p>
+
+<h3 class="text-2xl font-extrabold text-blue-700">
+02
+</h3>
+
+</div>
+
+<div class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-xl text-sm font-bold">
+RUNNING
+</div>
+
+</div>
+
+<h4 class="text-xl font-bold text-slate-800 mb-4">
+Nigdi To Chakan Plant
+</h4>
+
+<div class="space-y-3">
+
+<div class="flex justify-between">
+<p class="text-gray-500 text-sm">Driver</p>
+<p class="font-semibold">Rahul Shinde</p>
+</div>
+
+<div class="flex justify-between">
+<p class="text-gray-500 text-sm">Contact</p>
+
+<a href="tel:9123456780"
+class="font-semibold text-blue-600">
+9123456780
+</a>
+
+</div>
+
+</div>
+
+<button
+onclick="openTracking('route2','Route 02')"
+class="w-full bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-2xl font-bold mt-6">
+
+TRACK LIVE
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- MODAL -->
+
+<div id="trackingModal"
+class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+
+<div class="bg-white rounded-3xl w-full max-w-4xl p-5">
+
+<div class="flex items-center justify-between mb-5">
+
+<div>
+
+<h2 id="routeTitle"
+class="text-2xl font-bold text-blue-900">
+</h2>
+
+<p class="text-gray-500 text-sm">
+Live Bus Location
+</p>
+
+</div>
+
+<button
+onclick="closeTracking()"
+class="bg-red-100 text-red-600 px-4 py-2 rounded-xl font-bold">
+
+CLOSE
+
+</button>
+
+</div>
+
+<!-- MAP -->
+
+<div id="map"></div>
+
+<!-- LIVE INFO -->
+
+<div class="grid md:grid-cols-3 gap-4 mt-5">
+
+<div class="bg-slate-50 rounded-2xl p-4">
+
+<p class="text-gray-500 text-sm">
+Current Status
+</p>
+
+<h3 class="font-bold text-green-600 text-xl">
+Running
+</h3>
+
+</div>
+
+<div class="bg-slate-50 rounded-2xl p-4">
+
+<p class="text-gray-500 text-sm">
+Speed
+</p>
+
+<h3 class="font-bold text-xl">
+45 Km/h
+</h3>
+
+</div>
+
+<div class="bg-slate-50 rounded-2xl p-4">
+
+<p class="text-gray-500 text-sm">
+Updated
+</p>
+
+<h3 class="font-bold text-xl">
+Live
+</h3>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- FIREBASE -->
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<script>
+
+const firebaseConfig = {
+
+apiKey: "YOUR_API_KEY",
+
+authDomain: "YOUR_PROJECT.firebaseapp.com",
+
+databaseURL: "YOUR_DATABASE_URL",
+
+projectId: "YOUR_PROJECT_ID",
+
+storageBucket: "YOUR_PROJECT.appspot.com",
+
+messagingSenderId: "XXXX",
+
+appId: "XXXX"
+
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.database();
+
+let map;
+let marker;
+let watchRef;
+
+function initMap(){
+
+map = new google.maps.Map(document.getElementById("map"),{
+
+center:{
+lat:18.7506,
+lng:73.8772
+},
+
+zoom:13
+
+});
+
+marker = new google.maps.Marker({
+
+position:{
+lat:18.7506,
+lng:73.8772
+},
+
+map:map,
+
+title:"Live Bus",
+
+icon:"https://maps.google.com/mapfiles/ms/icons/bus.png"
+
+});
+
+}
+
+function openTracking(routeId,routeName){
+
+document.getElementById("trackingModal")
+.classList.remove("hidden");
+
+document.getElementById("routeTitle")
+.innerText = routeName;
+
+setTimeout(()=>{
+
+initMap();
+
+watchRef = db.ref("livebus/"+routeId);
+
+watchRef.on("value",(snap)=>{
+
+const data = snap.val();
+
+if(data){
+
+const pos = {
+lat:data.lat,
+lng:data.lng
+};
+
+marker.setPosition(pos);
+
+map.panTo(pos);
+
+}
+
+});
+
+},300);
+
+}
+
+function closeTracking(){
+
+document.getElementById("trackingModal")
+.classList.add("hidden");
+
+if(watchRef){
+
+watchRef.off();
+
+}
+
+}
+
+</script>
+
+<!-- GOOGLE MAP -->
+
+<script async
+src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAP_API_KEY&callback=initMap">
+</script>
+
+</body>
+</html>
